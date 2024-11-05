@@ -4,7 +4,7 @@ const { UserController } = require('../../controllers');
 const router = express.Router();
 
 
-router.post('/', UserController.signUp);
+router.post('/',UserMiddleware.validateUser, UserController.signUp);
 
 
 module.exports=router;

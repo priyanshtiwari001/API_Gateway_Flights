@@ -13,11 +13,11 @@ function createToken(input){
 }
 
 
-function decodeToken(jwtToken){
+function verifyToken(jwtToken){
     return jwt.verify(jwtToken,ServerConfig.JWT_SECRET_KEY);
 }
 module.exports={
     checkPassword,
     createToken,
-    decodeToken
+    verifyToken
 }

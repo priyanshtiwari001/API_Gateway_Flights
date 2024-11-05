@@ -51,8 +51,33 @@ async function signIn(data){
 }
 
 
+async function isAuthenicated(token){
+   try {
+    if(!token){
+        throw new AppErrors('Missing JWT token',StatusCodes.BAD_REQUEST);
+    }
+
+    const response = Auth.verifyToken(token);
+    const user = await userRepo.get(response.id);
+    if(!user) {
+        throw new AppErrors('No user found', StatusCodes.NOT_FOUND);
+    }
+    return user.id;
+
+   } catch (error) {
+    console.log(error);
+    if(error instanceof AppErrors) throw error;
+    if(error.name == 'JsonWebTokenError'){
+        throw new AppErrors('Invaild JWT token', StatusCodes.BAD_REQUEST);
+    }
+
+    throw error;
+   }
+}
+
 
 module.exports={
     userRegister,
-    signIn
+    signIn,
+    isAuthenicated
 }

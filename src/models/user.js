@@ -36,10 +36,10 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.addHook('beforeCreate', function encyrpt(user){
-    console.log('user before encrypt',user);
+    // console.log('user before encrypt',user);
     const encryptPassword = bcrypt.hashSync(user.password, +ServerConfig.SALTY_ROUND);
     user.password=encryptPassword;
-    console.log('user after encrypt',user);
+    // console.log('user after encrypt',user);
   })
   return User;
 };

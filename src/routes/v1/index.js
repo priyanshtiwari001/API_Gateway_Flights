@@ -5,7 +5,7 @@ const router = express.Router();
 const userRoutes = require('./user-routes');
 const { UserMiddleware } = require('../../middlewares');
 
-router.get('/info', UserMiddleware.checkAuth, InfoController.info);
+router.get('/info',  InfoController.info);
 
 router.use('/user',userRoutes);
 

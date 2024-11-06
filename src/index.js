@@ -16,6 +16,7 @@ app.use(express.urlencoded({extended:true}))
 
 app.use(limiter);
 
+// REVERSE PROXY
 app.use('/bookingsService',createProxyMiddleware({target:ServerConfig.BOOKING_SERVICE,changeOrigin: true }));
 
 app.use('/flightsService',createProxyMiddleware({target:ServerConfig.FLIGHT_SERVICE,changeOrigin: true }));

@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsToMany(models.User,{
    through:'User_Roles',
-   as:'user'
+    
       })
     }
   }

@@ -25,8 +25,10 @@ function validateUser(req,res,next){
  async function checkAuth(req,res,next){
    try {
     const response = await UserService.isAuthenicated(req.headers['x-access-token']);
+    
     if(response){
         req.user=response; // setting the user id in req object
+        console.log(response)
         next();
     }
 
@@ -37,4 +39,20 @@ function validateUser(req,res,next){
    }
 }
 
-module.exports={validateUser,checkAuth}
+async function isAdmin(req,res,next){
+    
+    const response = await UserService.isAdmin(req.user);
+    console.log('isAdmin',response);
+    if(!response){
+        return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({
+         message:"you don\'t have permission to do this action"
+        });
+    }
+    next();
+
+    
+}
+
+module.exports={validateUser,checkAuth,isAdmin}

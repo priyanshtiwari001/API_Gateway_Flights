@@ -8,7 +8,7 @@ const app = express();
 
 const limiter = rateLimit({
     windowMs:2*60*1000, // 2 mins
-    limit: 3, // Limit each IP to 2 requests per `window` (here, per 2 minutes).
+    limit: 30, // Limit each IP to 2 requests per `window` (here, per 2 minutes).
 })
 
 app.use(express.json());
@@ -23,9 +23,11 @@ app.use('/flightsService',createProxyMiddleware({target:ServerConfig.FLIGHT_SERV
 app.use('/api', apiRoutes);
 
 
-app.listen(ServerConfig.PORT, () => {
+app.listen(ServerConfig.PORT, async () => {
     console.log(`Successfully started the server on PORT : ${ServerConfig.PORT}`);
     
+
+;
 });
 
 

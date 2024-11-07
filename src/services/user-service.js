@@ -10,8 +10,8 @@ async function userRegister(data){
     try {
         const user = await userRepo.create(data);
         const role = await roleRepo.getRoleByName(Enums.USER_ROLES_ENUMS.CUSTOMER);
-        console.log(role);
-        user.addRole(role);
+        // console.log(role);
+        user.addRole(role); // due to assoication we can able to do that-> also it will ad the userId and roleId in userole table.
         return user;
     } catch (error) {
         console.log(error);
@@ -73,14 +73,61 @@ async function isAuthenicated(token){
     if(error.name == 'JsonWebTokenError'){
         throw new AppErrors('Invaild JWT token', StatusCodes.BAD_REQUEST);
     }
+    if(error.name =="TokenExpiredError"){
+        throw new AppErrors('JWT token Expired',StatusCodes.UNAUTHORIZED);
+    }
 
     throw error;
    }
 }
 
 
+async function addRoleToUser(data){
+    try{
+        const user = await userRepo.get(data.id);
+       
+        if(!user) {
+            throw new AppErrors('No user found for given Id', StatusCodes.NOT_FOUND);
+        }
+        const role = await roleRepo.getRoleByName(data.role);
+       
+        if(!role) {
+            throw new AppErrors('No role found for given name', StatusCodes.NOT_FOUND);
+        }
+        user.addRole(role);
+        return user;
+    }catch(error){
+        if(error instanceof AppErrors) throw error;
+        console.log(error);
+        throw new AppErrors('Something went wrong', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+
+
+}
+
+
+async function isAdmin(id){
+   try {
+    const user = await userRepo.get(id);
+    if(!user) {
+        throw new AppErrors('No user found for given Id', StatusCodes.NOT_FOUND);
+    }
+    const adminRole = await roleRepo.getRoleByName(Enums.USER_ROLES_ENUMS.ADMIN);
+    if(!adminRole) {
+        throw new AppErrors('No role found for given name', StatusCodes.NOT_FOUND);
+    }
+   return  user.hasRole(adminRole);
+   } catch (error) {
+    if(error instanceof AppErrors) throw error;
+        console.log(error);
+        throw new AppErrors('Something went wrong', StatusCodes.INTERNAL_SERVER_ERROR);
+   }
+}
+
 module.exports={
     userRegister,
     signIn,
-    isAuthenicated
+    isAuthenicated,
+    addRoleToUser,
+    isAdmin
 }

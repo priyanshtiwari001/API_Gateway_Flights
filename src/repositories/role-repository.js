@@ -9,6 +9,7 @@ class RoleRepository extends CrudRepository{
     async  getRoleByName(name){
      try{
         const role = await Role.findOne({where:{name:name}});  
+        console.log(role);
         return role;
      }catch(error){
         console.log(error);

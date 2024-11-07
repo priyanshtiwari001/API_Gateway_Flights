@@ -46,3 +46,9 @@ Lets take a look inside the `src` folder
  ```
  npm run dev
  ```
+
+
+
+setup isAdmin -> only admin can assign the admin role
+
+ authorize in the flight service that if u r not a admin or not a flight company so you dont able to edit the flight or delete a flight.
